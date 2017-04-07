@@ -29,39 +29,40 @@ int random(int min, int max) {
     }
 }
 
-int partition(vector<int> *numbers, int start, int end){
-    int pivotIx = random(start, end);
+int partition(vector<int> *numbers, int vStart, int vEnd, int shift){
+    int vPivotIx = random(vStart, vEnd);
 
-    int pivot = (*numbers)[pivotIx];
-    swap(numbers, end, pivotIx);
-    int wall = start;
+    int pivot = (*numbers)[shift + vPivotIx];
+    swap(numbers, vEnd + shift, vPivotIx + shift);
+    int vWall = vStart;
 
-    for (int cursor = start; cursor < end; cursor++) {
-        int value = (*numbers)[cursor];
+    for (int vCursor = vStart; vCursor < vEnd; vCursor++) {
+        int value = (*numbers)[vCursor + shift];
         if (value < pivot) {
-            swap(numbers, wall, cursor);
-            wall++;
+            swap(numbers, vWall + shift, vCursor + shift);
+            vWall++;
         }
     }
 
-    swap(numbers, wall, end);
-    return wall;
+    swap(numbers, vWall + shift, vEnd + shift);
+    return vWall;
 }
 
-int quickSelect(vector<int> *numbers, int start, int end, int smallestIth) {
-    if (start > end) {
+int quickSelect(vector<int> *numbers, int vStart, int vEnd, int vSmallestIth, int shift) {
+    if (vStart > vEnd) {
         throw "error!";
     }
 
-    int pivotIx = partition(numbers, start, end);
-
-    if (pivotIx == smallestIth) {
-        return pivotIx;
-    } else if (pivotIx > smallestIth) {
-        return quickSelect(numbers, start, pivotIx - 1, smallestIth);
+    int vPivotIx = partition(numbers, vStart, vEnd, shift);
+    int rPosition;
+    if (vPivotIx == vSmallestIth) {
+        rPosition = vPivotIx + shift;
+    } else if (vPivotIx > vSmallestIth) {
+        rPosition = quickSelect(numbers, vStart, vPivotIx - 1, vSmallestIth, shift);
     } else {
-        return quickSelect(numbers, pivotIx + 1, end, smallestIth);
+        rPosition = quickSelect(numbers, vPivotIx + 1, vEnd, vSmallestIth, shift);
     }
+    return rPosition;
 }
 
 void sortAlternate(vector<int> *numbers) {
@@ -80,8 +81,8 @@ void sortAlternate(vector<int> *numbers) {
     int endIndex = lastIndex;
     int startIndex = 0;
     for(int i = 0; i < lastIndex; i++) {
-        int smallestIth = isEven(i) ? endIndex-- : startIndex++;
-        int position = quickSelect(numbers, i, lastIndex, smallestIth);
+        int smallestIth = isEven(i) ? lastIndex - i : 0;
+        int position = quickSelect(numbers, 0, lastIndex - i, smallestIth, i);
         swap(numbers, position, i);
     }
 }
@@ -89,28 +90,13 @@ void sortAlternate(vector<int> *numbers) {
 int main(int argc, char *argv[])
 {
     vector<int> numbers;
-    numbers.push_back(5);
-    numbers.push_back(1);
-    numbers.push_back(3);
     numbers.push_back(2);
     numbers.push_back(4);
+    numbers.push_back(3);
+    numbers.push_back(5);
+    numbers.push_back(1);
 
-
-    //numbers.push_back(5);
-    //numbers.push_back(1);
-    //numbers.push_back(3);
-    //numbers.push_back(2);
-    //numbers.push_back(4);
-
-    // sortAlternate(&numbers);
-    // n - 1
-    // 1
-    // n - 2
-
-
-    int position = quickSelect(&numbers, 3, numbers.size() - 1, 3);
-
-    cout << position << endl;
+    sortAlternate(&numbers);
 
     for(int i = 0; i < numbers.size(); i++) {
         cout << numbers.at(i);
