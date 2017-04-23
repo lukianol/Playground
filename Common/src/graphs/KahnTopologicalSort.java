@@ -15,7 +15,8 @@ public class KahnTopologicalSort<Tkey, Tvalue> implements TopologicalSort<Tkey, 
 		
 		LinkedList<Tkey> sorted = new LinkedList<Tkey>();
 		LinkedList<Node<Tkey, Tvalue>> process = new LinkedList<Node<Tkey, Tvalue>>();
-		HashMap<Tkey, Integer> dependencies = this.countDependencies(graph, process);
+		HashMap<Tkey, Integer> dependencies = this.countDependencies(graph);
+		this.addRoots(graph, dependencies, process);		
 		
 		while(!process.isEmpty()) {
 			Node<Tkey, Tvalue> nodeToProcess = process.remove();
@@ -39,16 +40,30 @@ public class KahnTopologicalSort<Tkey, Tvalue> implements TopologicalSort<Tkey, 
 		return sorted;
 	}
 	
-	private HashMap<Tkey, Integer> countDependencies(Graph<Tkey, Tvalue> graph, LinkedList<Node<Tkey, Tvalue>> process) {
+	private void addRoots(Graph<Tkey, Tvalue> graph, HashMap<Tkey, Integer> dependencies, LinkedList<Node<Tkey, Tvalue>> process) {
+		for(Node<Tkey, Tvalue> node : graph.getNodes()){
+			if (dependencies.get(node.getKey()) == 0) {
+				process.add(node);
+			}
+		}		
+	}
+
+	private HashMap<Tkey, Integer> countDependencies(Graph<Tkey, Tvalue> graph) {
 		HashMap<Tkey, Integer> dependencies = new HashMap<Tkey, Integer>();
 		for(Node<Tkey, Tvalue> node : graph.getNodes()){
-			int count = node.getConnections().size();
-			dependencies.put(node.getKey(), count);
-			if (count == 0) {
-				process.add(node);
+			Tkey key = node.getKey();
+			if (!dependencies.containsKey(key)) {
+				dependencies.put(key, 0);
+			}
+			for(Node<Tkey, Tvalue> connection : node.getConnections()) {
+				key = connection.getKey();
+				int counter = 0;
+				if (dependencies.containsKey(key)) {
+					counter = dependencies.get(key);
+				}				 
+				dependencies.put(key, counter + 1); 
 			}
 		}
 		return dependencies;
 	}
-
 }

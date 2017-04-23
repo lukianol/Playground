@@ -46,7 +46,7 @@ public class ProjectBuildOrderTests {
 	}
 	
 	@Test
-	public void projectBuildOrder_GraphWithCycle_ThrowsException() throws CycleDetectedException {
+	public void projectBuildOrder_GraphWithCycleDfsSort_ThrowsException() throws CycleDetectedException {
 		String[] projects = {"a", "b"};
 		StringTuple[] dependencies = {
 				new StringTuple("a", "b"),
@@ -58,6 +58,27 @@ public class ProjectBuildOrderTests {
 				projects, 
 				dependencies, 
 				new DfsTopologicalSort<String, String>());
+			Assert.fail();
+		} catch(Exception e) {
+			if (e.getClass() != CycleDetectedException.class) {
+				Assert.fail();
+			}
+		}
+	}
+	
+	@Test
+	public void projectBuildOrder_GraphWithCycleKahnSort_ThrowsException() throws CycleDetectedException {
+		String[] projects = {"a", "b"};
+		StringTuple[] dependencies = {
+				new StringTuple("a", "b"),
+				new StringTuple("b", "a")
+		};
+
+		try {
+			ProjectBuildOrder.find(
+				projects, 
+				dependencies, 
+				new KahnTopologicalSort<String, String>());
 			Assert.fail();
 		} catch(Exception e) {
 			if (e.getClass() != CycleDetectedException.class) {
