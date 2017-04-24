@@ -7,12 +7,12 @@ import graphs.TopologicalSort;
 
 public class ProjectBuildOrder {	
 	
-	public static List<String> find(String[] projectNames, StringTuple[] dependencies, TopologicalSort<String, String> sort) throws CycleDetectedException {
+	public static List<String> find(String[] projectNames, StringTuple[] dependencies, TopologicalSort<String, String> sort) throws CycleDetectedException, DuplicatedNodeException {
 		Graph<String, String> graph = buildGraph(projectNames, dependencies, sort);
 		return sort.sort(graph);
 	}
 
-	private static Graph<String, String> buildGraph(String[] projectNames, StringTuple[] dependencies, TopologicalSort<String, String> sort) {
+	private static Graph<String, String> buildGraph(String[] projectNames, StringTuple[] dependencies, TopologicalSort<String, String> sort) throws DuplicatedNodeException {
 		Graph<String, String> graph = new Graph<String, String>();
 		for(String projectName : projectNames) {
 			graph.createNode(projectName);

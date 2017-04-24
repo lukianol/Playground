@@ -10,7 +10,7 @@ import core.StringTuple;
 public class ProjectBuildOrderTests {
 	
 	@Test
-	public void projectBuildOrder_Dfs_WorksAsExpected() throws CycleDetectedException {
+	public void projectBuildOrder_Dfs_WorksAsExpected() throws CycleDetectedException, DuplicatedNodeException {
 		String[] projects = {"a", "b", "c", "d", "e", "f"};
 		StringTuple[] dependencies = {
 				new StringTuple("a", "d"),
@@ -28,7 +28,7 @@ public class ProjectBuildOrderTests {
 	}
 	
 	@Test
-	public void projectBuildOrder_Kahn_WorksAsExpected() throws CycleDetectedException {
+	public void projectBuildOrder_Kahn_WorksAsExpected() throws CycleDetectedException, DuplicatedNodeException {
 		String[] projects = {"a", "b", "c", "d", "e", "f"};
 		StringTuple[] dependencies = {
 				new StringTuple("a", "d"),

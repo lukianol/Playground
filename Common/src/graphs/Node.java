@@ -18,7 +18,12 @@ public class Node<Tkey, Tvalue> {
 		return this.connections.values();
 	}
 	public void addConnection(Node<Tkey, Tvalue> node) {
-		this.connections.put(node.getKey(), node);		
+		this.connections.put(node.getKey(), node);
 	}
-
+	public boolean hasConnection(Node<Tkey, Tvalue> node) {
+		return this.connections.containsKey(node.getKey());
+	}
+	public void removeConnection(Node<Tkey, Tvalue> node) {
+		this.connections.remove(node.getKey());
+	}
 }
