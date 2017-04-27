@@ -7,4 +7,12 @@ public class Point {
 	}
 	public double x;
 	public double y;
+	
+	@Override
+	  public boolean equals(Object ob) {
+	    if (ob == null) return false;
+	    if (ob.getClass() != getClass()) return false;
+	    Point other = (Point)ob;
+	    return other.x == this.x && other.y == this.y;
+	  }
 }

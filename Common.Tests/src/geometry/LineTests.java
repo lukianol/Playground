@@ -78,30 +78,10 @@ public class LineTests {
 		assertFalse(Double.isFinite(i.y));
 	}
 	
-	@Test
-	public void lineAsPointIntersected() {
-		Point a = new Point(1, 3);
-		Point c = new Point(3, 1);
-		Point x = new Point(2, 2);
-		
-		Line l1 = new Line(a, c);
-		Line l2 = new Line(x, x);
-		Point i = l1.getIntersection(l2);		
-		assertEquals(x.x, i.x, DELTA);
-		assertEquals(x.y, i.y, DELTA);
-	}
-	
-	@Test
-	public void lineAsPointNotIntersected() {
-		Point a = new Point(1, 3);
-		Point c = new Point(3, 1);
+	@Test(expected=IllegalArgumentException.class)	
+	public void lineCannotBeOnePointer() {
 		Point x = new Point(1, 1);
-		
-		Line l1 = new Line(a, c);
-		Line l2 = new Line(x, x);
-		Point i = l1.getIntersection(l2);		
-		assertFalse(Double.isFinite(i.x));
-		assertFalse(Double.isFinite(i.y));
+		new Line(x, x);	
 	}
 	
 	@Test
