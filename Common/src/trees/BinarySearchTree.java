@@ -1,3 +1,4 @@
+package trees;
 public class BinarySearchTree<T extends Comparable<T>> {
 	
 	private TreeNode<T> _root;

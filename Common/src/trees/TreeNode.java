@@ -1,3 +1,4 @@
+package trees;
 
 public class TreeNode<T> {
 	public TreeNode(T value){
